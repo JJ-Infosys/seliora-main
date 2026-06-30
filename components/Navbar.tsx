@@ -107,7 +107,7 @@ export default function Navbar() {
 
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2 flex-shrink-0">
-            <span className="text-2xl font-bold text-amber-600">Seliora</span>
+            <span className="text-2xl font-bold text-amber-600">Seloria</span>
             <span className="hidden sm:inline text-xs text-gray-500">✦ Jewelry</span>
           </Link>
 

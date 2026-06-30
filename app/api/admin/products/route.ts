@@ -5,6 +5,49 @@ import { adminMiddleware } from '@/lib/auth';
 import { connectToDatabase } from '@/lib/db';
 import Product from '@/lib/models/Product';
 
+const toSlug = (value: string) =>
+  value
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9\s-]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-');
+
+const ensureUniqueSlug = async (base: string) => {
+  const normalized = base || `product-${Date.now()}`;
+  let slug = normalized;
+  let counter = 1;
+
+  while (await Product.exists({ slug })) {
+    slug = `${normalized}-${counter}`;
+    counter += 1;
+  }
+
+  return slug;
+};
+
+const toSku = (value: string) =>
+  value
+    .toUpperCase()
+    .trim()
+    .replace(/[^A-Z0-9\s-]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-');
+
+const ensureUniqueSku = async (base: string) => {
+  const fallback = `SKU-${Date.now()}`;
+  const normalized = base || fallback;
+  let sku = normalized;
+  let counter = 1;
+
+  while (await Product.exists({ sku })) {
+    sku = `${normalized}-${counter}`;
+    counter += 1;
+  }
+
+  return sku;
+};
+
 export async function GET(req: NextRequest) {
   const auth = await adminMiddleware(req);
   if (auth instanceof NextResponse) return auth;
@@ -44,14 +87,19 @@ export async function POST(req: NextRequest) {
     await connectToDatabase();
 
     const body = await req.json();
-    const { name, description, price, category, subcategory, images, metalType, gemstone, weight, dimensions, stock } = body;
+    const { name, description, price, category, subcategory, images, metalType, gemstone, weight, dimensions, stock, sku } = body;
 
     if (!name || !description || !price || !category || stock === undefined) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
+    const slug = await ensureUniqueSlug(toSlug(name));
+    const uniqueSku = await ensureUniqueSku(toSku(sku || name));
+
     const product = await Product.create({
       name,
+      slug,
+      sku: uniqueSku,
       description,
       price: Number(price),
       category,

@@ -15,7 +15,7 @@ export default function Footer() {
           {/* Brand */}
           <div className="md:col-span-1">
             <div className="flex items-center gap-2 mb-4">
-              <span className="text-2xl font-bold text-white">Seliora</span>
+              <span className="text-2xl font-bold text-white">Seloria</span>
               <span className="text-amber-500 text-sm">• Jewelry</span>
             </div>
             <p className="text-sm text-gray-400 leading-relaxed">
@@ -55,7 +55,7 @@ export default function Footer() {
               <li><Link href="/cart" className="hover:text-amber-400 transition-colors">My Cart</Link></li>
               <li><Link href="/auth/register" className="hover:text-amber-400 transition-colors">Create Account</Link></li>
               <li><Link href="/auth/login" className="hover:text-amber-400 transition-colors">Login</Link></li>
-              <li><a href="mailto:support@seliora.com" className="hover:text-amber-400 transition-colors">support@seliora.com</a></li>
+              <li><a href="mailto:support@Seloria.com" className="hover:text-amber-400 transition-colors">support@Seloria.com</a></li>
             </ul>
           </div>
 
@@ -73,7 +73,7 @@ export default function Footer() {
               </li>
               <li className="flex items-center gap-2">
                 <svg className="h-4 w-4 text-amber-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
-                <a href="mailto:support@seliora.com" className="text-gray-400 hover:text-amber-400 transition-colors">support@seliora.com</a>
+                <a href="mailto:support@Seloria.com" className="text-gray-400 hover:text-amber-400 transition-colors">support@Seloria.com</a>
               </li>
             </ul>
 
@@ -86,7 +86,7 @@ export default function Footer() {
 
         {/* Bottom bar */}
         <div className="mt-10 pt-6 border-t border-gray-800 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-gray-500">
-          <p>© {new Date().getFullYear()} Seliora Jewelry. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} Seloria Jewelry. All rights reserved.</p>
           <div className="flex items-center gap-4">
             <span>Secure payments by</span>
             <span className="text-white font-semibold">Razorpay</span>

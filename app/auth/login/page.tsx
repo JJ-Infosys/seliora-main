@@ -56,7 +56,7 @@ export default function LoginPage() {
         className="max-w-md w-full bg-white rounded-xl shadow-lg p-8"
       >
         <div className="text-center mb-8">
-          <Link href="/" className="text-3xl font-bold text-amber-600">Seliora</Link>
+          <Link href="/" className="text-3xl font-bold text-amber-600">Seloria</Link>
           <h2 className="text-2xl font-bold text-gray-800 mt-4">Welcome Back</h2>
           <p className="text-gray-600 mt-2">Sign in to your account</p>
         </div>

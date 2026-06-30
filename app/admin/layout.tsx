@@ -72,7 +72,7 @@ export default function AdminLayout({
         } md:translate-x-0 fixed md:relative z-40 w-64 bg-white shadow-lg transition-transform duration-300 ease-in-out flex flex-col h-full`}
       >
         <div className="p-4 border-b">
-          <h1 className="text-2xl font-bold text-amber-600">Seliora</h1>
+          <h1 className="text-2xl font-bold text-amber-600">Seloria</h1>
           <p className="text-xs text-gray-500">Admin Panel</p>
         </div>
 

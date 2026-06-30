@@ -34,7 +34,7 @@ export default function TermsPage() {
       <section className="bg-gradient-to-br from-amber-50 to-orange-50 py-16">
         <div className="max-w-4xl mx-auto px-4 text-center">
           <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">Terms & Conditions</h1>
-          <p className="text-gray-600">Please read these terms carefully before using Seliora.</p>
+          <p className="text-gray-600">Please read these terms carefully before using Seloria.</p>
         </div>
       </section>
 
@@ -42,7 +42,7 @@ export default function TermsPage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-8">
             <p className="text-amber-800 text-sm">
-              By using Seliora, you agree to these Terms and Conditions. If you do not agree, please do not use our website.
+              By using Seloria, you agree to these Terms and Conditions. If you do not agree, please do not use our website.
             </p>
           </div>
 

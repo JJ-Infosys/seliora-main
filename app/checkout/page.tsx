@@ -90,7 +90,7 @@ export default function CheckoutPage() {
         key: orderData.razorpayKeyId,
         amount: orderData.amount * 100,
         currency: 'INR',
-        name: 'Seliora',
+        name: 'Seloria',
         description: `Order #${orderData.orderId}`,
         order_id: orderData.razorpayOrderId,
         handler: async function (response: any) {
