@@ -7,6 +7,8 @@ import {
   ShoppingCartIcon,
   Bars3Icon,
   XMarkIcon,
+  MoonIcon,
+  SunIcon,
   HomeIcon,
   TagIcon,
   ClipboardDocumentListIcon,
@@ -24,6 +26,7 @@ export default function Navbar() {
   const [userRole, setUserRole] = useState('');
   const [cartCount, setCartCount] = useState(0);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const [isDark, setIsDark] = useState(false);
   const pathname = usePathname();
 
   useEffect(() => {
@@ -48,6 +51,15 @@ export default function Navbar() {
 
     checkAuth();
     updateCartCount();
+
+    const savedTheme = localStorage.getItem('theme');
+    const shouldUseDark =
+      savedTheme === 'dark' ||
+      (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches);
+
+    setIsDark(shouldUseDark);
+    document.documentElement.classList.toggle('dark', shouldUseDark);
+
     window.addEventListener('cartUpdated', updateCartCount);
     window.addEventListener('authChanged', handleAuthChanged);
     return () => {
@@ -55,6 +67,13 @@ export default function Navbar() {
       window.removeEventListener('authChanged', handleAuthChanged);
     };
   }, []);
+
+  const toggleTheme = () => {
+    const nextThemeIsDark = !isDark;
+    setIsDark(nextThemeIsDark);
+    document.documentElement.classList.toggle('dark', nextThemeIsDark);
+    localStorage.setItem('theme', nextThemeIsDark ? 'dark' : 'light');
+  };
 
   const checkAuth = async () => {
     try {
@@ -101,30 +120,43 @@ export default function Navbar() {
   if (pathname.startsWith('/admin')) return null;
 
   return (
-    <nav className="bg-white shadow-md fixed top-0 left-0 right-0 z-50">
+    <nav className="bg-white dark:bg-slate-900 shadow-md dark:shadow-slate-950/50 fixed top-0 left-0 right-0 z-50 border-b border-transparent dark:border-slate-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
 
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2 flex-shrink-0">
             <span className="text-2xl font-bold text-amber-600">Seloria</span>
-            <span className="hidden sm:inline text-xs text-gray-500">✦ Jewelry</span>
+            <span className="hidden sm:inline text-xs text-gray-500 dark:text-slate-400">✦ Jewelry</span>
           </Link>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-6">
-            <Link href="/" className={`${isActive('/')} transition-colors text-sm`}>Home</Link>
-            <Link href="/products" className={`${isActive('/products')} transition-colors text-sm`}>Shop</Link>
-            <Link href="/about" className={`${isActive('/about')} transition-colors text-sm`}>About Us</Link>
-            <Link href="/contact" className={`${isActive('/contact')} transition-colors text-sm`}>Contact Us</Link>
-            <Link href="/terms" className={`${isActive('/terms')} transition-colors text-sm`}>Terms</Link>
+            <Link href="/" className={`${isActive('/')} transition-colors text-sm dark:text-slate-200 dark:hover:text-amber-400`}>Home</Link>
+            <Link href="/products" className={`${isActive('/products')} transition-colors text-sm dark:text-slate-200 dark:hover:text-amber-400`}>Shop</Link>
+            <Link href="/about" className={`${isActive('/about')} transition-colors text-sm dark:text-slate-200 dark:hover:text-amber-400`}>About Us</Link>
+            <Link href="/contact" className={`${isActive('/contact')} transition-colors text-sm dark:text-slate-200 dark:hover:text-amber-400`}>Contact Us</Link>
+            <Link href="/terms" className={`${isActive('/terms')} transition-colors text-sm dark:text-slate-200 dark:hover:text-amber-400`}>Terms</Link>
           </div>
 
           {/* Right section */}
           <div className="flex items-center space-x-3">
+            <button
+              onClick={toggleTheme}
+              className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors"
+              aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+              title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+            >
+              {isDark ? (
+                <SunIcon className="h-6 w-6 text-amber-400" />
+              ) : (
+                <MoonIcon className="h-6 w-6 text-gray-700" />
+              )}
+            </button>
+
             {/* Cart with live counter */}
             <Link href="/cart" className="relative p-2">
-              <ShoppingCartIcon className="h-6 w-6 text-gray-700 hover:text-amber-600 transition-colors" />
+              <ShoppingCartIcon className="h-6 w-6 text-gray-700 dark:text-slate-200 hover:text-amber-600 dark:hover:text-amber-400 transition-colors" />
               {cartCount > 0 && (
                 <span className="absolute -top-0.5 -right-0.5 bg-amber-600 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
                   {cartCount > 99 ? '99+' : cartCount}
@@ -137,12 +169,12 @@ export default function Navbar() {
               <div className="relative">
                 <button
                   onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-                  className="flex items-center space-x-2 px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors"
+                  className="flex items-center space-x-2 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors"
                 >
                   <div className="h-8 w-8 rounded-full bg-amber-500 flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
                     {userName.charAt(0).toUpperCase()}
                   </div>
-                  <span className="text-sm text-gray-700 hidden sm:inline">{userName}</span>
+                  <span className="text-sm text-gray-700 dark:text-slate-200 hidden sm:inline">{userName}</span>
                 </button>
 
                 <AnimatePresence>
@@ -151,7 +183,7 @@ export default function Navbar() {
                       initial={{ opacity: 0, y: -10 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -10 }}
-                      className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg py-2 border border-gray-100"
+                      className="absolute right-0 mt-2 w-56 bg-white dark:bg-slate-900 rounded-lg shadow-lg py-2 border border-gray-100 dark:border-slate-800"
                     >
                       {userRole === 'admin' && (
                         <Link href="/admin/dashboard"
@@ -162,12 +194,12 @@ export default function Navbar() {
                         </Link>
                       )}
                       <Link href="/orders"
-                        className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                        className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors"
                         onClick={() => setIsUserMenuOpen(false)}>
-                        <ClipboardDocumentListIcon className="h-5 w-5 mr-3 text-gray-500" />
+                        <ClipboardDocumentListIcon className="h-5 w-5 mr-3 text-gray-500 dark:text-slate-400" />
                         My Orders
                       </Link>
-                      <div className="border-t border-gray-100 my-1" />
+                      <div className="border-t border-gray-100 dark:border-slate-800 my-1" />
                       <button onClick={handleLogout}
                         className="flex items-center w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors">
                         <XMarkIcon className="h-5 w-5 mr-3" />
@@ -185,9 +217,9 @@ export default function Navbar() {
             )}
 
             {/* Mobile menu button */}
-            <button className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
+            <button className="md:hidden p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors"
               onClick={() => setIsMenuOpen(!isMenuOpen)}>
-              {isMenuOpen ? <XMarkIcon className="h-6 w-6 text-gray-700" /> : <Bars3Icon className="h-6 w-6 text-gray-700" />}
+              {isMenuOpen ? <XMarkIcon className="h-6 w-6 text-gray-700 dark:text-slate-200" /> : <Bars3Icon className="h-6 w-6 text-gray-700 dark:text-slate-200" />}
             </button>
           </div>
         </div>
@@ -200,28 +232,28 @@ export default function Navbar() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-white border-t border-gray-100 overflow-hidden"
+            className="md:hidden bg-white dark:bg-slate-900 border-t border-gray-100 dark:border-slate-800 overflow-hidden"
           >
             <div className="px-4 py-3 space-y-1">
-              <Link href="/" className="flex items-center py-2 text-gray-700 hover:text-amber-600" onClick={() => setIsMenuOpen(false)}>
+              <Link href="/" className="flex items-center py-2 text-gray-700 dark:text-slate-200 hover:text-amber-600 dark:hover:text-amber-400" onClick={() => setIsMenuOpen(false)}>
                 <HomeIcon className="h-5 w-5 mr-3" /> Home
               </Link>
-              <Link href="/products" className="flex items-center py-2 text-gray-700 hover:text-amber-600" onClick={() => setIsMenuOpen(false)}>
+              <Link href="/products" className="flex items-center py-2 text-gray-700 dark:text-slate-200 hover:text-amber-600 dark:hover:text-amber-400" onClick={() => setIsMenuOpen(false)}>
                 <TagIcon className="h-5 w-5 mr-3" /> Shop
               </Link>
-              <Link href="/about" className="flex items-center py-2 text-gray-700 hover:text-amber-600" onClick={() => setIsMenuOpen(false)}>
+              <Link href="/about" className="flex items-center py-2 text-gray-700 dark:text-slate-200 hover:text-amber-600 dark:hover:text-amber-400" onClick={() => setIsMenuOpen(false)}>
                 <InformationCircleIcon className="h-5 w-5 mr-3" /> About Us
               </Link>
-              <Link href="/contact" className="flex items-center py-2 text-gray-700 hover:text-amber-600" onClick={() => setIsMenuOpen(false)}>
+              <Link href="/contact" className="flex items-center py-2 text-gray-700 dark:text-slate-200 hover:text-amber-600 dark:hover:text-amber-400" onClick={() => setIsMenuOpen(false)}>
                 <PhoneIcon className="h-5 w-5 mr-3" /> Contact Us
               </Link>
-              <Link href="/terms" className="flex items-center py-2 text-gray-700 hover:text-amber-600" onClick={() => setIsMenuOpen(false)}>
+              <Link href="/terms" className="flex items-center py-2 text-gray-700 dark:text-slate-200 hover:text-amber-600 dark:hover:text-amber-400" onClick={() => setIsMenuOpen(false)}>
                 <DocumentTextIcon className="h-5 w-5 mr-3" /> Terms & Conditions
               </Link>
               {isLoggedIn && (
                 <>
-                  <div className="border-t border-gray-100 my-1" />
-                  <Link href="/orders" className="flex items-center py-2 text-gray-700 hover:text-amber-600" onClick={() => setIsMenuOpen(false)}>
+                  <div className="border-t border-gray-100 dark:border-slate-800 my-1" />
+                  <Link href="/orders" className="flex items-center py-2 text-gray-700 dark:text-slate-200 hover:text-amber-600 dark:hover:text-amber-400" onClick={() => setIsMenuOpen(false)}>
                     <ClipboardDocumentListIcon className="h-5 w-5 mr-3" /> My Orders
                   </Link>
                   <button onClick={handleLogout} className="flex items-center w-full py-2 text-red-600 hover:text-red-700">
